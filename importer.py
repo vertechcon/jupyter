@@ -2,8 +2,12 @@ import io, os, sys, types, importlib, re
 from IPython import get_ipython
 from nbformat import read
 from IPython.core.interactiveshell import InteractiveShell
+from pathlib import Path
 
-def find_notebook(fullname, path=["/jupyter"]):
+print(str(Path(__file__).parent))
+defaultFolder = str(Path(__file__).parent)
+
+def find_notebook(fullname, path=[defaultFolder]):
         """find a notebook, given its fully qualified name and an optional path
 
         This turns "foo.bar" into "foo/bar.ipynb"
@@ -32,7 +36,7 @@ def find_notebook(fullname, path=["/jupyter"]):
                 return nb_path
 class NotebookLoader(object):
     """Module Loader for Jupyter Notebooks"""
-    def __init__(self, path="/jupyter"):
+    def __init__(self, path=defaultFolder):
         self.shell = InteractiveShell.instance()
         self.path = path
 
@@ -77,12 +81,12 @@ class NotebookFinder(object):
     def __init__(self):
         self.loaders = {}
 
-    def find_module(self, fullname, path=["/jupyter"]):
+    def find_module(self, fullname, path=[defaultFolder]):
 
         print(fullname)
         print(path)
         if not path:
-            path = ["/jupyter"]
+            path = [defaultFolder]
         nb_path = find_notebook(fullname, path)
         if not nb_path:
             return
@@ -95,7 +99,7 @@ class NotebookFinder(object):
         return self.loaders[key]
         
 if "JUPLOADER" not in os.environ:
-    sys.path.append("/jupyter")
+    sys.path.append(defaultFolder)
 
     print("Appending finder")
     os.environ["JUPLOADER"] = "1"
