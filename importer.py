@@ -6,6 +6,7 @@ from pathlib import Path
 
 print(str(Path(__file__).parent))
 defaultFolder = str(Path(__file__).parent)
+os.environ["IMPORTER_FOLDER"] = defaultFolder 
 
 def find_notebook(fullname, path=[defaultFolder]):
         """find a notebook, given its fully qualified name and an optional path
